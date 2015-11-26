@@ -4,6 +4,8 @@
 #include "cocos2d.h"
 #include "Piece.hpp"
 
+class Character;
+
 class MainScene : public cocos2d::Layer
 {
 public:
@@ -15,6 +17,12 @@ public:
 
     // implement the "static create()" method manually
     CREATE_FUNC(MainScene);
+
+protected:
+    Character* character;
+    void onEnter() override;
+    void setupTouchHandling();
+
 private:
     cocos2d::Node* pieceNode;
     cocos2d::Vector<Piece*> pieces;

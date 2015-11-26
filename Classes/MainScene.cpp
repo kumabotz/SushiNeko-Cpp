@@ -3,6 +3,7 @@
 #include "ui/CocosGUI.h"
 #include "CharacterReader.hpp"
 #include "PieceReader.hpp"
+#include "Character.hpp"
 
 USING_NS_CC;
 
@@ -46,6 +47,8 @@ bool MainScene::init()
     ui::Helper::doLayout(rootNode);
 
     this->pieceNode = rootNode->getChildByName("pieceNode");
+    this->character = rootNode->getChildByName<Character*>("character");
+
     for (int i = 0; i < 10; ++i)
     {
         Piece* piece = dynamic_cast<Piece*>(CSLoader::createNode("Piece.csb"));
@@ -58,4 +61,36 @@ bool MainScene::init()
     addChild(rootNode);
 
     return true;
+}
+
+void MainScene::onEnter()
+{
+    Layer::onEnter();
+    this->setupTouchHandling();
+}
+
+void MainScene::setupTouchHandling()
+{
+    auto touchListener = EventListenerTouchOneByOne::create();
+
+    touchListener->onTouchBegan = [&](Touch* touch, Event* event)
+    {
+        // get the location of the touch in the MainScene's coordinate system
+        Vec2 touchLocation = this->convertTouchToNodeSpace(touch);
+
+        // check if the touch was on the left or right side of the screen
+        // move the character to the appropriate side
+        if (touchLocation.x < this->getContentSize().width / 2.0f)
+        {
+            this->character->setSide(Side::Left);
+        }
+        else
+        {
+            this->character->setSide(Side::Right);
+        }
+
+        return true;
+    };
+
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }

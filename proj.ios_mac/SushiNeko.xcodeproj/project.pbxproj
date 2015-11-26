@@ -127,6 +127,7 @@
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D6B0611A1803AB670077942B /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		DB09FEA31C06FE83007203A1 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		DBA37D381C054B3A008847F1 /* Character.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Character.cpp; sourceTree = "<group>"; };
 		DBA37D391C054B3A008847F1 /* Character.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Character.hpp; sourceTree = "<group>"; };
 		DBA37D3C1C054C04008847F1 /* CharacterReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterReader.cpp; sourceTree = "<group>"; };
@@ -279,6 +280,7 @@
 				DBA37D391C054B3A008847F1 /* Character.hpp */,
 				DBA37D3C1C054C04008847F1 /* CharacterReader.cpp */,
 				DBA37D401C054DC4008847F1 /* Piece.cpp */,
+				DB09FEA31C06FE83007203A1 /* Constants.h */,
 				DBA37D411C054DC4008847F1 /* Piece.hpp */,
 				DBA37D441C054F24008847F1 /* PieceReader.cpp */,
 				DBA37D451C054F24008847F1 /* PieceReader.hpp */,
