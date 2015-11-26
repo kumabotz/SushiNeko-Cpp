@@ -10,6 +10,8 @@
 
 void Character::setSide(Side side)
 {
+    this->side = side;
+
     if (this->side == Side::Right)
     {
         this->setScaleX(-1.0f);
