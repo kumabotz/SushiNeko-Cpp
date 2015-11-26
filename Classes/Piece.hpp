@@ -15,6 +15,7 @@ class Piece : public cocos2d::Node
 {
 public:
     CREATE_FUNC(Piece);
+    float getSpriteHeight();
     
 protected:
     

@@ -45,6 +45,16 @@ bool MainScene::init()
     rootNode->setContentSize(size);
     ui::Helper::doLayout(rootNode);
 
+    this->pieceNode = rootNode->getChildByName("pieceNode");
+    for (int i = 0; i < 10; ++i)
+    {
+        Piece* piece = dynamic_cast<Piece*>(CSLoader::createNode("Piece.csb"));
+        float rollHeight = piece->getSpriteHeight();
+        piece->setPosition(0.0f, rollHeight / 2.0f * i);
+        this->pieceNode->addChild(piece);
+        this->pieces.pushBack(piece);
+    }
+
     addChild(rootNode);
 
     return true;
