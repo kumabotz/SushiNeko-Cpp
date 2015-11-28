@@ -18,3 +18,35 @@ float Piece::getSpriteHeight()
     // then return the roll sprite's height
     return roll->getContentSize().height;
 }
+
+void Piece::setObstacleSide(Side side)
+{
+    this->obstacleSide = side;
+
+    Sprite* roll = this->getChildByName<Sprite*>("roll");
+    Sprite* leftChopstick = roll->getChildByName<Sprite*>("leftChopstick");
+    Sprite* rightChopstick = roll->getChildByName<Sprite*>("rightChopstick");
+
+    switch (this->obstacleSide)
+    {
+        case Side::None:
+            leftChopstick->setVisible(false);
+            rightChopstick->setVisible(false);
+            break;
+
+        case Side::Left:
+            leftChopstick->setVisible(true);
+            rightChopstick->setVisible(false);
+            break;
+
+        case Side::Right:
+            leftChopstick->setVisible(false);
+            rightChopstick->setVisible(true);
+            break;
+    }
+}
+
+Side Piece::getObstacleSide()
+{
+    return this->obstacleSide;
+}

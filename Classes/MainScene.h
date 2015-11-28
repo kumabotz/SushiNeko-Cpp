@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "Piece.hpp"
+#include "Constants.h"
 
 class Character;
 
@@ -20,8 +21,10 @@ public:
 
 protected:
     Character* character;
+    Side lastObstacleSide;
     void onEnter() override;
     void setupTouchHandling();
+    Side getSideForObstacle(Side lastSide);
 
 private:
     cocos2d::Node* pieceNode;
