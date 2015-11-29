@@ -50,6 +50,7 @@ bool MainScene::init()
     this->character = rootNode->getChildByName<Character*>("character");
 
     this->lastObstacleSide = Side::Left;
+    this->pieceIndex = 0;
 
     for (int i = 0; i < 10; ++i)
     {
@@ -94,6 +95,8 @@ void MainScene::setupTouchHandling()
             this->character->setSide(Side::Right);
         }
 
+        this->stepTower();
+
         return true;
     };
 
@@ -137,4 +140,26 @@ Side MainScene::getSideForObstacle(Side lastSide)
     }
 
     return side;
+}
+
+void MainScene::stepTower()
+{
+    // get a reference to the lowest piece
+    Piece* currentPiece = this->pieces.at(this->pieceIndex);
+
+    // move the lowest piece to the top of the tower
+    currentPiece->setPosition(currentPiece->getPosition() + Vec2(0.0f, currentPiece->getSpriteHeight() / 2.0f * 10.0f));
+
+    // set the zOrder of the piece so that it appears on top of the others
+    currentPiece->setLocalZOrder(currentPiece->getLocalZOrder() + 1);
+
+    // set the side of the obstacle, based on the side of the obstacle of the piece right before this one
+    currentPiece->setObstacleSide(this->getSideForObstacle(this->lastObstacleSide));
+    this->lastObstacleSide = currentPiece->getObstacleSide();
+
+    // move pieceNode down so that the whole tower moves down
+    this->pieceNode->setPosition(this->pieceNode->getPosition() + Vec2(0.0f, -1.0f * currentPiece->getSpriteHeight() / 2.0f));
+
+    // change the index referencing the lowest piece
+    this->pieceIndex = (this->pieceIndex + 1) % 10;
 }

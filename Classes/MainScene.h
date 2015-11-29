@@ -22,8 +22,10 @@ public:
 protected:
     Character* character;
     Side lastObstacleSide;
+    int pieceIndex;
     void onEnter() override;
     void setupTouchHandling();
+    void stepTower();
     Side getSideForObstacle(Side lastSide);
 
 private:
