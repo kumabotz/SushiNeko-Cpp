@@ -51,6 +51,7 @@ bool MainScene::init()
 
     this->lastObstacleSide = Side::Left;
     this->pieceIndex = 0;
+    this->gameState = GameState::Playing;
 
     for (int i = 0; i < 10; ++i)
     {
@@ -81,21 +82,48 @@ void MainScene::setupTouchHandling()
 
     touchListener->onTouchBegan = [&](Touch* touch, Event* event)
     {
-        // get the location of the touch in the MainScene's coordinate system
-        Vec2 touchLocation = this->convertTouchToNodeSpace(touch);
-
-        // check if the touch was on the left or right side of the screen
-        // move the character to the appropriate side
-        if (touchLocation.x < this->getContentSize().width / 2.0f)
+        switch (this->gameState)
         {
-            this->character->setSide(Side::Left);
-        }
-        else
-        {
-            this->character->setSide(Side::Right);
-        }
+            case GameState::Playing:
+            {
+                // get the location of the touch in the MainScene's coordinate system
+                Vec2 touchLocation = this->convertTouchToNodeSpace(touch);
 
-        this->stepTower();
+                // check if the touch was on the left or right side of the screen
+                // move the character to the appropriate side
+                if (touchLocation.x < this->getContentSize().width / 2.0f)
+                {
+                    this->character->setSide(Side::Left);
+                }
+                else
+                {
+                    this->character->setSide(Side::Right);
+                }
+
+                if (this->isGameOver())
+                {
+                    this->triggerGameOver();
+                    return true;
+                }
+
+                this->stepTower();
+
+                if (this->isGameOver())
+                {
+                    this->triggerGameOver();
+                    return true;
+                }
+
+                break;
+            }
+
+            case GameState::GameOver:
+            {
+                this->resetGameState();
+                this->triggerPlaying();
+                break;
+            }
+        }
 
         return true;
     };
@@ -162,4 +190,36 @@ void MainScene::stepTower()
 
     // change the index referencing the lowest piece
     this->pieceIndex = (this->pieceIndex + 1) % 10;
+}
+
+bool MainScene::isGameOver()
+{
+    bool gameOver = false;
+
+    // get a reference to the lowest piece
+    Piece* currentPiece = this->pieces.at(this->pieceIndex);
+
+    // if the obstacle and the character are touching, then game over
+    if (currentPiece->getObstacleSide() == this->character->getSide())
+    {
+        gameOver = true;
+    }
+
+    return gameOver;
+}
+
+void MainScene::resetGameState(){
+    // make sure the lowest piece doesn't have an obstacle when the new game starts
+    Piece* currentPiece = this->pieces.at(this->pieceIndex);
+    currentPiece->setObstacleSide(Side::None);
+}
+
+void MainScene::triggerGameOver()
+{
+    this->gameState = GameState::GameOver;
+}
+
+void MainScene::triggerPlaying()
+{
+    this->gameState = GameState::Playing;
 }
