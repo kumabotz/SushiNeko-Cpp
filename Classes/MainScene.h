@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Piece.hpp"
 #include "Constants.h"
+#include "ui/CocosGUI.h"
 
 class Character;
 
@@ -40,7 +41,11 @@ protected:
 private:
     cocos2d::Node* pieceNode;
     cocos2d::Vector<Piece*> pieces;
+    cocos2d::ui::Text* scoreLabel;
     GameState gameState;
+    int score;
+
+    void setScore(int score);
     bool isGameOver();
 };
 

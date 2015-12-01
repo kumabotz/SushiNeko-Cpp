@@ -48,6 +48,7 @@ bool MainScene::init()
 
     this->pieceNode = rootNode->getChildByName("pieceNode");
     this->character = rootNode->getChildByName<Character*>("character");
+    this->scoreLabel = rootNode->getChildByName<cocos2d::ui::Text*>("scoreLabel");
 
     this->lastObstacleSide = Side::Left;
     this->pieceIndex = 0;
@@ -66,6 +67,7 @@ bool MainScene::init()
     }
 
     addChild(rootNode);
+    this->resetGameState();
 
     return true;
 }
@@ -113,6 +115,8 @@ void MainScene::setupTouchHandling()
                     this->triggerGameOver();
                     return true;
                 }
+
+                this->setScore(this->score + 1);
 
                 break;
             }
@@ -212,6 +216,7 @@ void MainScene::resetGameState(){
     // make sure the lowest piece doesn't have an obstacle when the new game starts
     Piece* currentPiece = this->pieces.at(this->pieceIndex);
     currentPiece->setObstacleSide(Side::None);
+    this->setScore(0);
 }
 
 void MainScene::triggerGameOver()
@@ -222,4 +227,13 @@ void MainScene::triggerGameOver()
 void MainScene::triggerPlaying()
 {
     this->gameState = GameState::Playing;
+}
+
+void MainScene::setScore(int score)
+{
+    // update the score instance variable
+    this->score = score;
+
+    // update the score label
+    this->scoreLabel->setString(std::to_string(this->score));
 }
