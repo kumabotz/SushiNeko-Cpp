@@ -50,6 +50,10 @@ bool MainScene::init()
     this->character = rootNode->getChildByName<Character*>("character");
     this->scoreLabel = rootNode->getChildByName<cocos2d::ui::Text*>("scoreLabel");
 
+    // use auto as it is not super important to understand the type of the variable
+    auto lifeBG = rootNode->getChildByName("lifeBG");
+    this->timeBar = lifeBG->getChildByName<Sprite*>("lifeBar");
+
     this->lastObstacleSide = Side::Left;
     this->pieceIndex = 0;
     this->gameState = GameState::Playing;
@@ -117,6 +121,7 @@ void MainScene::setupTouchHandling()
                 }
 
                 this->setScore(this->score + 1);
+                this->setTimeLeft(this->timeLeft + 0.25f);
 
                 break;
             }
@@ -217,11 +222,13 @@ void MainScene::resetGameState(){
     Piece* currentPiece = this->pieces.at(this->pieceIndex);
     currentPiece->setObstacleSide(Side::None);
     this->setScore(0);
+    this->setTimeLeft(5.0f);
 }
 
 void MainScene::triggerGameOver()
 {
     this->gameState = GameState::GameOver;
+    this->setTimeLeft(0.0f);
 }
 
 void MainScene::triggerPlaying()
@@ -236,4 +243,13 @@ void MainScene::setScore(int score)
 
     // update the score label
     this->scoreLabel->setString(std::to_string(this->score));
+}
+
+void MainScene::setTimeLeft(float timeLeft)
+{
+    // clamp the time left timer to between 0 and 10 seconds
+    this->timeLeft = clampf(timeLeft, 0.0f, 10.0f);
+
+    // update the UI to reflect the correct time left
+    this->timeBar->setScaleX(timeLeft / 10.0f);
 }

@@ -42,11 +42,14 @@ private:
     cocos2d::Node* pieceNode;
     cocos2d::Vector<Piece*> pieces;
     cocos2d::ui::Text* scoreLabel;
+    cocos2d::Sprite* timeBar;
     GameState gameState;
     int score;
+    float timeLeft;
 
     void setScore(int score);
     bool isGameOver();
+    void setTimeLeft(float timeLeft);
 };
 
 #endif // __MAIN_SCENE_H__
