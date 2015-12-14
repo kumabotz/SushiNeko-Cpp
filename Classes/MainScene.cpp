@@ -80,6 +80,7 @@ void MainScene::onEnter()
 {
     Layer::onEnter();
     this->setupTouchHandling();
+    this->scheduleUpdate();
 }
 
 void MainScene::setupTouchHandling()
@@ -252,4 +253,24 @@ void MainScene::setTimeLeft(float timeLeft)
 
     // update the UI to reflect the correct time left
     this->timeBar->setScaleX(timeLeft / 10.0f);
+}
+
+void MainScene::update(float dt)
+{
+    // update is called before every new frame is rendered
+    // dt is the amount of time elapsed (in seconds) between this update call and the previous one
+    // call the superclass method update
+    Layer::update(dt);
+
+    if (this->gameState == GameState::Playing)
+    {
+        // if the game is being played
+        // reduce the timer by the amount of the time elapsed
+        this->setTimeLeft(timeLeft - dt);
+
+        if (this->timeLeft <= 0.0f)
+        {
+            this->triggerGameOver();
+        }
+    }
 }

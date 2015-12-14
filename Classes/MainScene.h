@@ -50,6 +50,7 @@ private:
     void setScore(int score);
     bool isGameOver();
     void setTimeLeft(float timeLeft);
+    void update(float dt) override;
 };
 
 #endif // __MAIN_SCENE_H__
