@@ -248,6 +248,24 @@ void MainScene::triggerGameOver()
 {
     this->gameState = GameState::GameOver;
     this->setTimeLeft(0.0f);
+
+    // get a reference to the top-most node
+    auto scene = this->getChildByName("Scene");
+
+    // get a reference to the mat sprite
+    auto mat = scene->getChildByName("mat");
+
+    // get a reference to the game over score label
+    cocos2d::ui::Text* gameOverScoreLabel = mat->getChildByName<cocos2d::ui::Text*>("gameOverScoreLabel");
+
+    // set the score label to the user's score
+    gameOverScoreLabel->setString(std::to_string(this->score));
+
+    // load and run the game over animations
+    cocostudio::timeline::ActionTimeline* gameOverTimeline = CSLoader::createTimeline("MainScene.csb");
+    this->stopAllActions();
+    this->runAction(gameOverTimeline);
+    gameOverTimeline->play("gameOver", false);
 }
 
 void MainScene::triggerPlaying()
