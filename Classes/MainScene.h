@@ -10,6 +10,8 @@ class Character;
 
 enum class GameState
 {
+    Title,
+    Ready,
     Playing,
     GameOver
 };
@@ -36,6 +38,8 @@ protected:
     void triggerGameOver();
     void resetGameState();
     void triggerPlaying();
+    void triggerTitle();
+    void triggerReady();
     Side getSideForObstacle(Side lastSide);
 
 private:

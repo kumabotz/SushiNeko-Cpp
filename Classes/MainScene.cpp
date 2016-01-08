@@ -56,7 +56,7 @@ bool MainScene::init()
 
     this->lastObstacleSide = Side::Left;
     this->pieceIndex = 0;
-    this->gameState = GameState::Playing;
+    this->gameState = GameState::Title;
 
     for (int i = 0; i < 10; ++i)
     {
@@ -80,6 +80,7 @@ void MainScene::onEnter()
 {
     Layer::onEnter();
     this->setupTouchHandling();
+    this->triggerTitle();
     this->scheduleUpdate();
 }
 
@@ -91,6 +92,18 @@ void MainScene::setupTouchHandling()
     {
         switch (this->gameState)
         {
+            case GameState::Title:
+            {
+                this->triggerReady();
+                break;
+            }
+
+            case GameState::Ready:
+            {
+                this->triggerPlaying();
+                // no break here!
+            }
+
             case GameState::Playing:
             {
                 // get the location of the touch in the MainScene's coordinate system
@@ -130,7 +143,7 @@ void MainScene::setupTouchHandling()
             case GameState::GameOver:
             {
                 this->resetGameState();
-                this->triggerPlaying();
+                this->triggerReady();
                 break;
             }
         }
@@ -222,6 +235,7 @@ void MainScene::resetGameState(){
     // make sure the lowest piece doesn't have an obstacle when the new game starts
     Piece* currentPiece = this->pieces.at(this->pieceIndex);
     currentPiece->setObstacleSide(Side::None);
+    this->scoreLabel->setVisible(false);
     this->setScore(0);
     this->setTimeLeft(5.0f);
 }
@@ -235,6 +249,53 @@ void MainScene::triggerGameOver()
 void MainScene::triggerPlaying()
 {
     this->gameState = GameState::Playing;
+
+    // get a reference to the top-most node
+    auto scene = this->getChildByName("Scene");
+
+    // get a reference to the left and right tap sprite
+    cocos2d::Sprite* tapLeft = scene->getChildByName<cocos2d::Sprite*>("tapLeft");
+    cocos2d::Sprite* tapRight = scene->getChildByName<cocos2d::Sprite*>("tapRight");
+
+    // create two fade actions
+    cocos2d::FadeOut* leftFade = cocos2d::FadeOut::create(0.35f);
+    cocos2d::FadeOut* rightFade = cocos2d::FadeOut::create(0.35f);
+
+    // run the fade actions
+    tapLeft->runAction(leftFade);
+    tapRight->runAction(rightFade);
+
+    this->scoreLabel->setVisible(true);
+}
+
+void MainScene::triggerTitle()
+{
+    this->gameState = GameState::Title;
+    cocostudio::timeline::ActionTimeline* titleTimeline = CSLoader::createTimeline("MainScene.csb");
+    this->stopAllActions();
+    this->runAction(titleTimeline);
+    titleTimeline->play("title", false);
+}
+
+void MainScene::triggerReady()
+{
+    this->gameState = GameState::Ready;
+
+    // get a reference to the top-most node
+    auto scene = this->getChildByName("Scene");
+
+    // get a reference to the left and right tap sprite
+    cocos2d::Sprite* tapLeft = scene->getChildByName<cocos2d::Sprite*>("tapLeft");
+    cocos2d::Sprite* tapRight = scene->getChildByName<cocos2d::Sprite*>("tapRight");
+
+    // make sure the sprites are visible
+    tapLeft->setOpacity(255);
+    tapRight->setOpacity(255);
+
+    cocostudio::timeline::ActionTimeline* readyTimeline = CSLoader::createTimeline("MainScene.csb");
+    this->stopAllActions();
+    this->runAction(readyTimeline);
+    readyTimeline->play("ready", true);
 }
 
 void MainScene::setScore(int score)
