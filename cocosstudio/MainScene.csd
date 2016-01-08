@@ -2,7 +2,7 @@
   <PropertyGroup Name="MainScene" Type="Scene" ID="a2ee0952-26b5-49ae-8bf9-4f1d6279b798" Version="2.3.3.0" />
   <Content ctype="GameProjectContent">
     <Content>
-      <Animation Duration="120" Speed="1.0000" ActivedAnimationName="ready">
+      <Animation Duration="120" Speed="1.0000" ActivedAnimationName="title">
         <Timeline ActionTag="-1186537508" Property="Position">
           <PointFrame FrameIndex="1" X="320.0000" Y="624.0000">
             <EasingData Type="0" />
@@ -266,13 +266,13 @@
             <FileData Type="Normal" Path="Assets/Images/resources-2x/life_bg.png" Plist="" />
             <BlendFunc Src="770" Dst="771" />
           </AbstractNodeData>
-          <AbstractNodeData Name="title_1" ActionTag="-283457013" VisibleForFrame="False" Tag="16" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="88.5000" RightMargin="88.5000" TopMargin="192.0001" BottomMargin="478.9999" ctype="SpriteObjectData">
+          <AbstractNodeData Name="title_1" ActionTag="-283457013" Tag="16" IconVisible="False" PositionPercentXEnabled="True" PositionPercentYEnabled="True" LeftMargin="88.5000" RightMargin="88.5000" TopMargin="-172.8879" BottomMargin="843.8879" ctype="SpriteObjectData">
             <Size X="463.0000" Y="289.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="1.0000" />
-            <Position X="320.0000" Y="767.9999" />
+            <Position X="320.0000" Y="1132.8879" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <CColor A="255" R="255" G="255" B="255" />
-            <PrePosition X="0.5000" Y="0.8000" />
+            <PrePosition X="0.5000" Y="1.1801" />
             <PreSize X="0.7234" Y="0.3010" />
             <FileData Type="Normal" Path="Assets/Images/resources-2x/title.png" Plist="" />
             <BlendFunc Src="770" Dst="771" />

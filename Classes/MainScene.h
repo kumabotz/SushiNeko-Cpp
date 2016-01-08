@@ -50,11 +50,13 @@ private:
     GameState gameState;
     int score;
     float timeLeft;
+    cocos2d::Vec2 flyingPiecePosition;
 
     void setScore(int score);
     bool isGameOver();
     void setTimeLeft(float timeLeft);
     void update(float dt) override;
+    void animateHitPiece(Side obstacleSide);
 };
 
 #endif // __MAIN_SCENE_H__

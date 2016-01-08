@@ -81,6 +81,7 @@ void MainScene::onEnter()
     Layer::onEnter();
     this->setupTouchHandling();
     this->triggerTitle();
+    this->flyingPiecePosition = this->pieceNode->getPosition();
     this->scheduleUpdate();
 }
 
@@ -126,6 +127,7 @@ void MainScene::setupTouchHandling()
                     return true;
                 }
 
+                this->character->runChopAnimation();
                 this->stepTower();
 
                 if (this->isGameOver())
@@ -197,6 +199,7 @@ void MainScene::stepTower()
 {
     // get a reference to the lowest piece
     Piece* currentPiece = this->pieces.at(this->pieceIndex);
+    this->animateHitPiece(currentPiece->getObstacleSide());
 
     // move the lowest piece to the top of the tower
     currentPiece->setPosition(currentPiece->getPosition() + Vec2(0.0f, currentPiece->getSpriteHeight() / 2.0f * 10.0f));
@@ -209,7 +212,8 @@ void MainScene::stepTower()
     this->lastObstacleSide = currentPiece->getObstacleSide();
 
     // move pieceNode down so that the whole tower moves down
-    this->pieceNode->setPosition(this->pieceNode->getPosition() + Vec2(0.0f, -1.0f * currentPiece->getSpriteHeight() / 2.0f));
+    cocos2d::MoveBy* moveAction = cocos2d::MoveBy::create(0.15f, Vec2(0.0f, -1.0f * currentPiece->getSpriteHeight() / 2.0f));
+    this->pieceNode->runAction(moveAction);
 
     // change the index referencing the lowest piece
     this->pieceIndex = (this->pieceIndex + 1) % 10;
@@ -334,4 +338,37 @@ void MainScene::update(float dt)
             this->triggerGameOver();
         }
     }
+}
+
+void MainScene::animateHitPiece(Side obstacleSide)
+{
+    // load a new piece from CSLoader
+    Piece* flyingPiece = dynamic_cast<Piece*>(CSLoader::createNode("Piece.csb"));
+
+    // make sure the flying piece obstacle matches the correct side of the real one
+    flyingPiece->setObstacleSide(obstacleSide);
+
+    // set the position and add it to the scene
+    flyingPiece->setPosition(this->flyingPiecePosition);
+    this->addChild(flyingPiece);
+
+    // load the piece's animation timeline
+    cocostudio::timeline::ActionTimeline* pieceTimeline = CSLoader::createTimeline("Piece.csb");
+
+    // get the side the character is on
+    Side characterSide = this->character->getSide();
+
+    // if the character is on the left, animate the piece to the right and vice-versa
+    std::string animationName = (characterSide == Side::Left) ? std::string("moveRight") : std::string("moveLeft");
+
+    // run the action so the timeline gets update ticks
+    flyingPiece->runAction(pieceTimeline);
+
+    // tell the timeline to play the animation
+    pieceTimeline->play(animationName, false);
+
+    // on the last frame of the animation, remove the piece from the scene
+    pieceTimeline->setLastFrameCallFunc([this, &flyingPiece]() {
+        this->removeChild(flyingPiece);
+    });
 }
